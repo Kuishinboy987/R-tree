@@ -70,7 +70,7 @@ API Description
 
 One may access the api like this, 
 
-..code :: Python
+.. code-block:: python
     import Rtree
 
     # initial an empty R-tree
