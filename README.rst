@@ -39,11 +39,11 @@ Workflow :
 
 2. Structure management: Insert or delete spatial objects, adjusting nodes as needed.
 
-3. Query Execution: Traverse only the nodes whose MBR** intersects the query region.
+3. Query Execution: Traverse only the nodes whose MBR* intersects the query region.
 
 4. Output: Return the set of results that satisfy the query.
 
-MBR: Minimum Bounding Rectangle, the basic concept in managing R-trees.
+*MBR: Minimum Bounding Rectangle, the basic concept in managing R-trees.
 
 Constraints: 
 
@@ -98,6 +98,7 @@ Engineering Infrastructure
 ==========================
 
 Build system: C++: CMake ; Python: pybind11
+
 Version control: prefer GitHub(or probably git)
 
 Schedule
@@ -119,4 +120,5 @@ References
 ==========
 
 1. R-tree wiki: https://en.wikipedia.org/wiki/R-tree
+
 2. Pybind11 documentation: https://pybind11.readthedocs.io
