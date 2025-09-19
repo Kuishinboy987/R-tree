@@ -34,12 +34,16 @@ System Architecture
 ===================
 
 Workflow : 
+
 1. Initialization: Create an empty R-tree(or build a tree).
+
 2. Structure management: Insert or delete spatial objects, adjusting nodes as needed.
+
 3. Query Execution: Traverse only the nodes whose MBR** intersects the query region.
+
 4. Output: Return the set of results that satisfy the query.
 
-\*MBR: Minimum Bounding Rectangle, the basic concept in managing R-trees.
+MBR: Minimum Bounding Rectangle, the basic concept in managing R-trees.
 
 Constraints: 
 
@@ -52,15 +56,20 @@ Constraints:
 4. Objects are represented by rectangles (MBRs).
 
 Modularization: 
+
 1. Node: Defines node structure (MBR, children, pointers).
+
 2. Insertion: Implements insertion rules and node splitting.
+
 3. Deletion: Manages object removal and rebalancing.
+
 4. Search: Handles spatial queries (range, nearest neighbor).
 
 API Description
 ===============
 
 One may access the api like this, 
+
 ..code :: Python
     import Rtree
 
