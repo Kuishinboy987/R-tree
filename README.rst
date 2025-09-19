@@ -39,12 +39,16 @@ Workflow :
 3. Query Execution: Traverse only the nodes whose MBR** intersects the query region.
 4. Output: Return the set of results that satisfy the query.
 
-**MBR: Minimum Bounding Rectangle, the basic concept in managing R-trees.
+\*MBR: Minimum Bounding Rectangle, the basic concept in managing R-trees.
 
 Constraints: 
+
 1. After every insertion or deletion, the tree must remain balanced.
+
 2. Node capacity (the maximum and minimum number of entries per node) is fixed.
+
 3. Data is assumed to be static or moderately dynamic.
+
 4. Objects are represented by rectangles (MBRs).
 
 Modularization: 
