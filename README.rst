@@ -36,9 +36,10 @@ System Architecture
 Workflow : 
 1. Initialization: Create an empty R-tree(or build a tree).
 2. Structure management: Insert or delete spatial objects, adjusting nodes as needed.
-3. Query Execution: Traverse only the nodes whose MBR* intersects the query region.
+3. Query Execution: Traverse only the nodes whose MBR** intersects the query region.
 4. Output: Return the set of results that satisfy the query.
-/*MBR: Minimum Bounding Rectangle, the basic concept in managing R-trees.
+
+**MBR: Minimum Bounding Rectangle, the basic concept in managing R-trees.
 
 Constraints: 
 1. After every insertion or deletion, the tree must remain balanced.
