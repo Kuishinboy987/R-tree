@@ -71,6 +71,7 @@ API Description
 One may access the api like this, 
 
 .. code-block:: python
+
     import Rtree
 
     # initial an empty R-tree
