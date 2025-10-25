@@ -15,7 +15,7 @@ int main(){
     CHECK(a.intersects(b));      // 重疊
     CHECK(!a.intersects(c));     // 分離
     CHECK(a.intersects(d));      // 邊貼邊視為相交
-    CHECK(a.area() == 4.0);
+    CHECK(a.area() == 4.0);      // area: 2*2 = 4
 
     return fails ? EXIT_FAILURE : EXIT_SUCCESS;
 }
