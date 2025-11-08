@@ -1,0 +1,24 @@
+# CMake
+build/
+build-*/
+CMakeFiles/
+CMakeCache.txt
+cmake-build-*/
+
+# 編譯產物
+*.o
+*.obj
+*.a
+*.lib
+*.so
+*.dylib
+*.dll
+*.exe
+*.pdb
+
+# IDE/OS 雜項
+.vscode/
+.idea/
+*.vcxproj.user
+.DS_Store
+Thumbs.db
