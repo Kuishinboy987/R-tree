@@ -1,0 +1,5 @@
+PYTHON: 3.10
+
+numpy
+pandas
+matplot
