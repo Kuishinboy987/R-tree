@@ -98,7 +98,7 @@ struct Node {
 };
 
 // ======= RTree structure def. =======
-template <typename T, int MAX_ENTRIES = 8, int MIN_ENTRIES = 3>
+template <typename T, int MAX_ENTRIES = 8, int MIN_ENTRIES = 4>
 
 class RTree {
 public:
@@ -205,6 +205,14 @@ public:
         if (!root) return result;
         searchInternal(root, query, result);
         return result;
+    }
+
+    int Height() const {
+        if (!root) return 0;
+        int h = 1;
+        Node<T>* n = root;
+        while (!n->leaf) { n = n->entries[0].child; ++h; }
+        return h;
     }
 
 private:

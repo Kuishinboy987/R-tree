@@ -11,6 +11,14 @@ target_compile_features(rtree INTERFACE cxx_std_17)
 
 # --- Tests
 enable_testing()
+add_executable(test_houseData tests/test_houseData.cpp)
+target_link_libraries(test_houseData PRIVATE rtree)
+add_test(NAME houseData
+         COMMAND test_houseData ${CMAKE_SOURCE_DIR}/Dataset/processed_house.csv)
+
+add_executable(test_complex_fake tests/test_complex_fake.cpp)
+target_link_libraries(test_complex_fake PRIVATE rtree)
+add_test(NAME complex_fake COMMAND test_complex_fake)
 
 add_executable(test_rect tests/test_rect.cpp)
 target_link_libraries(test_rect PRIVATE rtree)
@@ -46,3 +54,12 @@ set_target_properties(rtree_bindings PROPERTIES
   RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/python
   ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/ignored
 )
+
+
+# cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+# cmake --build build -j
+# ctest --test-dir build
+
+# cmake -S . -B build_dbg -DCMAKE_BUILD_TYPE=Debug
+# cmake --build build_dbg -j
+# ctest --test-dir build_dbg
