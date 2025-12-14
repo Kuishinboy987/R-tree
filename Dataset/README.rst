@@ -1,0 +1,1 @@
+house_prices.csv can be download on https://www.kaggle.com/datasets/juhibhojani/house-price/data
