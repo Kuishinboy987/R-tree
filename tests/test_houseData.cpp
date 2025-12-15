@@ -23,7 +23,8 @@ static bool parse3(const std::string& line, int& id, double& x, double& y) {
     return true;
 }
 
-static std::vector<int> brute_force(const std::vector<std::pair<Rect,int>>& data, const Rect& q) {
+static std::vector<int> brute_force(const std::vector<std::pair<Rect,int>>& data, 
+    const Rect& q) {
     std::vector<int> out;
     for (auto& [r,id] : data) if (r.intersect(q)) out.push_back(id);
     return out;
@@ -42,7 +43,7 @@ int main(int argc, char** argv) {
     std::string line;
     std::getline(fin, line); // skip header
 
-    RTree<int, 30, 15> tree;
+    RTree<int, 100, 50> tree;
     std::vector<std::pair<Rect,int>> data;
     data.reserve(200000);
 
@@ -63,12 +64,23 @@ int main(int argc, char** argv) {
     }
 
     auto t1 = std::chrono::steady_clock::now();
+
     std::cout << "Loaded rows: " << data.size() << "\n";
     std::cout << "Tree height: " << tree.Height() << "\n";
-    // std::cout << minx << ',' << miny << ',' << maxx << ',' << maxy << "\n";
     std::cout << "read file time + Insert time (ms): "
               << std::chrono::duration_cast<std::chrono::milliseconds>(t1 - t0).count()
               << "\n";
+
+    auto ms = tree.MemoryStats();
+    std::cout << "Nodes: " << ms.nodes << "\n";
+    std::cout << "Entries: " << ms.entries << "\n";
+    std::cout << "Estimated tree memory: " << ms.bytes
+            << " bytes (" << (ms.bytes / (1024.0 * 1024.0)) << " MiB)\n";
+
+    std::size_t data_bytes =
+        sizeof(data) + data.capacity() * sizeof(std::pair<Rect,int>);
+    std::cout << "data vector (for linear search) bytes (estimated): " << data_bytes
+        << " (" << (data_bytes / (1024.0 * 1024.0)) << " MiB)\n";
 
     // set queries, and insure RTree vs Linear will use the same queries
     const int Q = 20000;
@@ -110,6 +122,28 @@ int main(int argc, char** argv) {
 
     std::cout << "RTree query time (ms): " << rt_ms << ", total hits=" << sumRTree << "\n";
     std::cout << "Linear query time (ms): " << ln_ms << ", total hits=" << sumLinear << "\n";
+
+    // check whether all search results are the same
+    auto equal_result = [] (std::vector<int> a, std::vector<int> b) {
+        std::sort(a.begin(), a.end());
+        std::sort(b.begin(), b.end());
+        return a == b;
+    };
+
+    for (int i = 0; i < Q; ++i) {
+        const Rect& q = queries[i];
+
+        auto a = tree.Search(q);
+        auto b = brute_force(data, q);
+
+        if (!equal_result(std::move(a), std::move(b))) {
+            std::cerr << "Mismatch at query #" << i << "\n";
+            std::cerr << "RTree size=" << tree.Search(q).size()
+                    << " Linear size=" << brute_force(data, q).size() << "\n";
+            return 2;
+        }
+    }
+    std::cout << "Correctness check: ALL queries matched.\n";
 
     if (sumRTree != sumLinear) {
         std::cerr << "WARNING: total hits mismatch -> Search correctness issue.\n";

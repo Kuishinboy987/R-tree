@@ -215,6 +215,24 @@ public:
         return h;
     }
 
+    // Calculate memory usage
+    struct MemStats {
+        std::size_t nodes = 0;
+        std::size_t entries = 0;
+        std::size_t bytes = 0;
+    };
+
+    MemStats MemoryStats() const {
+        MemStats s;
+        if (!root) return s;
+        memoryStatsDfs(root, s);
+        return s;
+    }
+
+    std::size_t MemoryUsageBytes() const {
+        return MemoryStats().bytes;
+    }
+
 private:
     Node<T>* root;
 
@@ -455,45 +473,6 @@ private:
         }
     }
 
-    // void findLeaf(Node<T>* node, const Rect& r, const T& value, std::vector<Node<T>*>& outLeaf, std::vector<int>& outIdx)
-    // {
-    //     if (node->leaf) {
-    //         for (int i = 0; i < (int)node->entries.size(); ++i) {
-    //             Entry<T>& e = node->entries[i];
-    //             if (e.value == value /* && e.mbr == r */) {
-    //                 outLeaf.push_back(node);
-    //                 outIdx.push_back(i);
-    //             }
-    //         }
-    //     } else {
-    //         for (auto& e : node->entries) {
-    //             if (!e.mbr.intersect(r)) continue;
-    //             if (findLeaf(e.child, r, value, outLeaf, outIdx))
-    //         }
-    //     }
-    // }
-
-    // void findLeaf(Node<T>* node, const Rect& query, const T& value, std::vector<T>& out, 
-    //     std::vector<std::pair<Node<T>*, int>> outLoc) {
-    //     if (node->leaf) {
-    //         for (int i = 0; i < (int)node->entries.size(); ++i) {
-    //             Entry<T>& e = node->entries[i];
-    //             if (e.mbr.intersect(query)) {
-    //                 out.push_back(e.value);
-    //                 if (e.value == value) {
-    //                     outLoc.push_back({node, i})
-    //                 }
-    //             }
-    //         }
-    //     } else {
-    //         for (auto& e : node->entries) {
-    //             if (e.mbr.intersect(query)) {
-    //                 findLeaf(e.child, query, value, out, outLoc);
-    //             }
-    //         }
-    //     }
-    // }
-
     void condenseTree(Node<T>* startleaf, std::vector<std::pair<Rect, T>>& orphans) {
         Node<T>* N = startleaf;
 
@@ -545,4 +524,22 @@ private:
             }
         }
     }
+
+    void memoryStatsDfs(Node<T>* n, MemStats& s) const {
+        if (!n) return;
+
+        s.nodes += 1;
+        s.entries += n->entries.size();
+
+        s.bytes += sizeof(*n);
+
+        s.bytes += n->entries.capacity() * sizeof(Entry<T>);
+
+        if (!n->leaf) {
+            for (const auto& e : n->entries) {
+                if (e.child) memoryStatsDfs(e.child, s);
+            }
+        }
+    }
+
 };
